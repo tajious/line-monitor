@@ -1,8 +1,8 @@
 import os
+import json
 
 import requests
-from flask import Flask
-from flask import request
+from flask import Flask, request
 
 app = Flask(__name__)
 LINE_ACCESS_TOKEN = os.environ.get("LINE_ACCESS_TOKEN")
@@ -22,7 +22,8 @@ def _line_request(message):
 
 @app.route('/monitor', methods=['POST', ])
 def line_monitor():
-    message = request.data.get('message')
+    data = json.loads(request.data)
+    message = data.get('message')
     return _line_request(message)
 
 
