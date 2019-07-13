@@ -1,4 +1,5 @@
 import os
+import json
 
 import requests
 from flask import Flask, request
@@ -19,8 +20,17 @@ def _line_request(message):
     return "Webhook received"
 
 
+@app.route('/monitor', methods=['POST'])
+def line_monitor():
+    body = request.stream.read()
+    body = json.loads(body)
+    message = body.get('message')
+    name = body.get('name')
+    return _line_request(f"{name}: {message}")
+
+
 @app.route('/message', methods=['GET', 'POST'])
-def line_test():
+def line_custom():
     message = request.args.get('q')
     if not message:
         return "Invalid request"
@@ -28,5 +38,4 @@ def line_test():
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=7788, debug=True)
-
+    app.run(host='0.0.0.0', port=3000, debug=True)
