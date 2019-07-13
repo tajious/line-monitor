@@ -22,8 +22,8 @@ def _line_request(message):
 
 @app.route('/monitor', methods=['POST'])
 def line_monitor():
-    body = request.stream.read()
-    body = json.loads(body)
+    body = request.form
+    print(body)
     message = body.get('message')
     name = body.get('name')
     return _line_request(f"{name}: {message}")
